@@ -1,3 +1,4 @@
+const {FILTER} = require('../lib/FILTER.js')
 const express = require('express');
 const path = require('path');
 
@@ -7,12 +8,12 @@ const db_config = require(path.join(__dirname, '../config/database.js'));
 const connection = db_config.init();
 db_config.connect(connection);
 
-router.post('/', (req, res) => {
-  reqBody = req.body
+router.get('/', (req, res) => {
+  reqQuery = req.query
   const returnData = []
-  for (key in reqBody) {
-    if (reqBody[key] == true){
-      returnData.push(parseInt(key)+1)
+  for (var key in req.query){
+    if(reqQuery[key] == "true"){
+      returnData.push(FILTER[key])
     }
   }
   if (returnData.length==0){
@@ -20,7 +21,6 @@ router.post('/', (req, res) => {
       `select *
       from cafe`,
     (err, rows, field) => {
-      console.log(rows);
       return res.send(rows);
     })
   }
@@ -30,14 +30,11 @@ router.post('/', (req, res) => {
       FROM cafe_filter as a, cafe as b
       WHERE a.cafe_id = b.id and filter_id = ${returnData[0]}`,
     (err, rows, field) => {
-      console.log(rows);
       return res.send(rows);
     })
   }
   else {
-    console.log(returnData);
     content = returnData.join()
-    console.log(content);
     connection.query(
       `SELECT *
       FROM cafe_filter as a, cafe as b
@@ -46,7 +43,6 @@ router.post('/', (req, res) => {
       HAVING COUNT(CASE WHEN filter_id IN (${content}) THEN 1 END ) = ${returnData.length}
       `,returnData,
       (err, rows, field) => {
-        console.log(rows);
         return res.send(rows);
       })
   }
