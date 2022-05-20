@@ -9,10 +9,6 @@ const  User  = require('../models/User');
 
 const router = express.Router();
 
-const db_config = require(path.join(__dirname, '../config/database.js'));
-const connection = db_config.init();
-db_config.connect(connection);
-
 router.get('/session', (req, res) => {
   res.send({"isLoggedIn":req.isAuthenticated()});
 })
