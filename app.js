@@ -1,7 +1,11 @@
 const express = require('express')
 const path = require('path');
 const cors = require('cors');
+const session = require('express-session');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+
+const passportConfig = require('./passport');
 
 const app = express() 
 const PORT = 8000
@@ -11,7 +15,9 @@ app.use(bodyParser.json());
 
 const cafeListRouter = require('./routes/cafe_list');
 const cafeListFilterRouter= require('./routes/cafe_filter');
+const authRouter = require('./routes/auth');
 
+// cors error 해결
 app.use(cors({
   origin:true,
   credentials:true
