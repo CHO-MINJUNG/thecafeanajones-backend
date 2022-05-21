@@ -26,14 +26,13 @@ module.exports = class User extends Sequelize.Model {
             sequelize,
             timestamps:false,
             underscored:false,
-            modelName: 'User',
-            tableName: 'User',
+            modelName: 'user',
+            tableName: 'user',
             paranoid: false,
             charset:'utf8',
             collate: 'utf8_general_ci',
         });
     }
-    // static associate(db) {
-    //     db.User.hasMany(db.Office_Info, { foreignKey: 'user_id', sourceKey: 'id' });
-    // }
+    static associate(db) {
+    }
 }

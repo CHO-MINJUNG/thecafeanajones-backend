@@ -14,17 +14,13 @@ router.get('/session', (req, res) => {
 })
 
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
-  const { phone, password} = req.body; 
+  const {phone, password} = req.body; 
   try{
-    const isUser = await User.findOne({where: {email}});
+    const isUser = await User.findOne({where: {phone}});
 
     if (isUser){
-      return res.send( {message: "이미 가입된 이메일입니다"});    
+      return res.send( {message: "이미 가입된 번호입니다"});    
     }
-    if(password != re_password){
-      return res.send({message:"입력된 비밀번호가 서로 일치하지 않습니다"})
-    }
-
     const password_encrypted = await bcrypt.hash(password, SALTROUNDS);
     await User.create({
       phone:phone,
@@ -34,7 +30,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
   } catch(error){
     console.log(error);
-    return res.send(error);
+    return res.send({message: "에러 발생"});
   }
 });
 

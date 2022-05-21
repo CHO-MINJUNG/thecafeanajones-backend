@@ -5,11 +5,11 @@ const User = require('../models/User');
 module.exports = () => {
     passport.serializeUser((user, done) => {
       // req.session에 저장할 데이터 
-      done(null, user.email);
+      done(null, user.phone);
     });
-    passport.deserializeUser((email, done) => {
+    passport.deserializeUser((phone, done) => {
       User.findOne({
-        where: { email },
+        where: { phone },
         raw: true,
         // sequelize의 include사용시 문제가 생기면..
         // nested: true

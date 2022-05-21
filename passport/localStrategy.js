@@ -11,7 +11,7 @@ module.exports = () => {
     passwordField: 'password',
     session: true,
     passReqToCallback: false
-  }, async (email, userPassword, done) => {
+  }, async (phone, userPassword, done) => {
     try {
       const isUser = await User.findOne({where:{ phone }});
       if (!isUser) {
