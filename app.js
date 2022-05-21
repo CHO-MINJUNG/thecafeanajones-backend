@@ -15,6 +15,7 @@ const PORT = 8000
 
 const cafeListRouter = require('./routes/cafe_list');
 const cafeListFilterRouter= require('./routes/cafe_filter');
+const cafeScrapRouter = require('./routes/cafe_scrap');
 const authRouter = require('./routes/auth');
 
 sequelize.sync({force: false})
@@ -52,9 +53,10 @@ app.use(cors({
 }));
 
 
-app.use('/cafe/auth', authRouter)
+app.use('/cafe/auth', authRouter);
 app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
+app.use('/cafe/list/scrap', cafeScrapRouter);
 
 app.use((req, res, next) => {
     const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
