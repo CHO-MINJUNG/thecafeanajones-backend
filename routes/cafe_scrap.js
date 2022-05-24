@@ -46,24 +46,5 @@ router.get('/filter', isLoggedIn, (req, res) => {
   })
 })
 
-router.get('/', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.send({userScrap: false})
-  }else{
-    reqQuery = req.query
-    connection.query(
-      `select *
-      from cafe as c, user_scrap as u
-      where c.id = u.cafe_id and u.user_id = ${req.user.id} and c.id= ${reqQuery.cafeId}`,
-    (err, rows, field) => {
-      if (rows.length == 0){
-        return res.send({userScrap:false})
-      }
-      else{
-        return res.send({userScrap:true});
-      }
-    })
-  }
-})
 
 module.exports = router;

@@ -13,6 +13,21 @@ router.get('/session', (req, res) => {
   res.send({"isLoggedIn":req.isAuthenticated()});
 })
 
+router.post('/isUser', async (req, res) => {
+  try {
+    const {phone} = req.body;
+    const isUser = await User.findOne({where: {phone}});
+    if (isUser){
+      return res.send({isUser: 'login'})
+    }else {
+      return res.send({isUser: 'join'})
+    }
+  } catch(err) {
+    console.log(err);
+    return res.send({message: "에러 발생"})
+  }
+})
+
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
   const {phone, password} = req.body; 
   try{

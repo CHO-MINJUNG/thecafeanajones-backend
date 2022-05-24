@@ -14,6 +14,7 @@ passportConfig();
 const PORT = 8000
 
 const cafeListRouter = require('./routes/cafe_list');
+const cafeDetailRouter = require('./routes/cafe_detail');
 const cafeListFilterRouter= require('./routes/cafe_filter');
 const cafeScrapRouter = require('./routes/cafe_scrap');
 const authRouter = require('./routes/auth');
@@ -54,6 +55,7 @@ app.use(cors({
 
 
 app.use('/cafe/auth', authRouter);
+app.use('/cafe/detail', cafeDetailRouter);
 app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
 app.use('/cafe/list/scrap', cafeScrapRouter);
