@@ -10,7 +10,9 @@ const  User  = require('../models/User');
 const router = express.Router();
 
 router.get('/session', (req, res) => {
-  res.send({"isLoggedIn":req.isAuthenticated()});
+  const isLoggedIn = req.isAuthenticated();
+  
+  return res.send({"isLoggedIn": isLoggedIn});
 })
 
 router.post('/isUser', async (req, res) => {
@@ -34,14 +36,14 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
     const isUser = await User.findOne({where: {phone}});
 
     if (isUser){
-      return res.send( {message: "이미 가입된 번호입니다"});    
+      return res.send( {isRegistered:false, message: "이미 가입된 번호입니다"});    
     }
     const password_encrypted = await bcrypt.hash(password, SALTROUNDS);
     await User.create({
       phone:phone,
       password:password_encrypted,
     })
-    return res.send({createUser:true})
+    return res.send({isRegistered:true})
 
   } catch(error){
     console.log(error);
@@ -57,14 +59,14 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
         return next(authError);
       }
       if (!isUser) {
-        return res.send({userLogin:false, message: info.message})
+        return res.send({isLoggedIn:false, message: info.message})
       }
       
       return req.login(isUser, (loginError) => {
         if (loginError) {
           return next(loginError);
         } 
-        return res.send({userLogin:true});
+        return res.send({isLoggedIn:true});
       });
     })(req, res, next) ; // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
   });
