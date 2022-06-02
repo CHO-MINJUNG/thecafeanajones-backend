@@ -13,7 +13,7 @@ router.get('/session', (req, res) => {
   const isLoggedIn = req.isAuthenticated();
   console.log(req.isAuthenticated());
   return res.send({"isLoggedIn": isLoggedIn});
-})
+});
 
 router.post('/isUser', async (req, res) => {
   try {
@@ -21,18 +21,18 @@ router.post('/isUser', async (req, res) => {
     const isUser = await User.findOne({where: {phone}});
     if (isUser){
       return res.send({isUser: 'login'})
-    }else {
+    } else {
       return res.send({isUser: 'join'})
     }
   } catch(err) {
     console.log(err);
     return res.send({message: "에러 발생"})
   }
-})
+});
 
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
   const {phone, password} = req.body; 
-  try{
+  try {
     const isUser = await User.findOne({where: {phone}});
 
     if (isUser){
@@ -52,6 +52,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 });
 
 // authenticate(전략, 콜백함수(앞의 전략(local)에서 done함수 결과값들을 차례대로 받아오게 하는 것))
+<<<<<<< HEAD
   router.post('/login', isNotLoggedIn, (req, res, next) => {
     console.log("아니", req.isAuthenticated());
     passport.authenticate('local', (authError, isUser, info) => {
@@ -78,5 +79,31 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
     req.session.destroy();
     return res.send({logoutSuccess:true})
   })
+=======
+router.post('/login',isNotLoggedIn, (req, res, next) => {
+  passport.authenticate('local', (authError, isUser, info) => {
+    if (authError) {
+      console.error(authError);
+      return next(authError);
+    }
+    if (!isUser) {
+      return res.send({isLoggedIn:false, message: info.message})
+    }
+    
+    return req.login(isUser, (loginError) => {
+      if (loginError) {
+        return next(loginError);
+      } 
+      return res.send({isLoggedIn:true});
+    });
+  })(req, res, next) ; // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
+});
+
+router.get('/logout', isLoggedIn, (req, res) => {
+  req.logout();
+  req.session.destroy();
+  return res.send({logoutSuccess:true})
+});
+>>>>>>> f5dc6de27b629bf2143c99f2d9d51db5035eb9b3
 
 module.exports = router;
