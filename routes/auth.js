@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/session', (req, res) => {
   const isLoggedIn = req.isAuthenticated();
-  
+  console.log(req.isAuthenticated());
   return res.send({"isLoggedIn": isLoggedIn});
 })
 
@@ -52,9 +52,11 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 });
 
 // authenticate(전략, 콜백함수(앞의 전략(local)에서 done함수 결과값들을 차례대로 받아오게 하는 것))
-  router.post('/login',isNotLoggedIn, (req, res, next) => {
+  router.post('/login', isNotLoggedIn, (req, res, next) => {
+    console.log("아니", req.isAuthenticated());
     passport.authenticate('local', (authError, isUser, info) => {
       if (authError) {
+        console.log("이건가");
         console.error(authError);
         return next(authError);
       }

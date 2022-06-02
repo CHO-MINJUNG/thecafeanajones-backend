@@ -3,6 +3,8 @@ const path = require('path');
 
 const router = express.Router();
 
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares/auth_middleware');
+
 const db_config = require(path.join(__dirname, '../config/database.js'));
 const connection = db_config.init();
 db_config.connect(connection);
@@ -13,11 +15,12 @@ router.get('/', (req, res) => {
   // scrap 유무
   if (!req.isAuthenticated()) {
     cafeDetail.userScrap = false
-  }else{
+  }
+  else{
     connection.query(
       `select *
       from cafe as c, user_scrap as u
-      where c.id = u.cafe_id and u.user_id = ${req.user.id} and c.id= ${reqQuery.cafeId}`,
+      where c.id=u.cafe_id and u.user_id = ${req.user.id} and c.id= ${reqQuery.cafeId}`,
     (err, rows, field) => {
       if (rows.length == 0){
         cafeDetail.userScrap = false
@@ -34,7 +37,6 @@ router.get('/', (req, res) => {
     from cafe_filter
     where cafe_id = ${reqQuery.cafeId}`,
   (err, rows, field) => {
-    console.log(rows);
     for (i in rows){
       filterId.push(rows[i].filter_id)
     }

@@ -5,6 +5,9 @@ const cors = require('cors');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const dotenv = require('dotenv')
+
+dotenv.config();
 
 const {sequelize} = require('./models');
 const passportConfig = require('./passport');
@@ -31,7 +34,7 @@ sequelize.sync({force: false})
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(session({
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,
     cookie: {

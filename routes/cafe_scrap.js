@@ -19,6 +19,9 @@ router.post('/', isLoggedIn, (req, res) => {
     },
   (err, rows, field) => {
     if(err) {
+      if (err.code == "ER_DUP_ENTRY"){
+        return res.send({message: "이미 저장된 카페입니다"})
+      }
       return res.send({message:"요청이 실패하였습니다."})
     } 
     return res.send({message:"저장 완료"})
