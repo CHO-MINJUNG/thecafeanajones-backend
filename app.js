@@ -20,6 +20,7 @@ const cafeListRouter = require('./routes/cafe_list');
 const cafeDetailRouter = require('./routes/cafe_detail');
 const cafeListFilterRouter= require('./routes/cafe_filter');
 const cafeScrapRouter = require('./routes/cafe_scrap');
+const cafeCreateRouter = require('./routes/cafe_create');
 const authRouter = require('./routes/auth');
 
 sequelize.sync({force: false})
@@ -62,6 +63,7 @@ app.use('/cafe/detail', cafeDetailRouter);
 app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
 app.use('/cafe/list/scrap', cafeScrapRouter);
+app.use('/cafe', cafeCreateRouter)
 
 app.use((req, res, next) => {
     const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

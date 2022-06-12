@@ -9,7 +9,7 @@ db_config.connect(connection);
 
 router.get('/', (req, res) => {
   connection.query(
-    `select *
+    `select id, name, address
     from cafe`,
   (err, rows, field) => {
     return res.send(rows);
