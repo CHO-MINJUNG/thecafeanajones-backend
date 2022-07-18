@@ -10,10 +10,12 @@ db_config.connect(connection);
 router.get('/', (req, res) => {
   connection.query(
     `select id, name, address
-    from cafe`,
+    from cafe
+    where latitude is NULL`,
   (err, rows, field) => {
     return res.send(rows);
   })
 })
+// cafe filter group by 개수 전달
 
 module.exports = router;

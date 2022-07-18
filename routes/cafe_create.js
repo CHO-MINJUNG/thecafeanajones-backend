@@ -65,7 +65,4 @@ insert_db()
 
 })
 
-
-
-
 module.exports = router;

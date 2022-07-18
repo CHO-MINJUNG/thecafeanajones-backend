@@ -23,6 +23,11 @@ const cafeScrapRouter = require('./routes/cafe_scrap');
 const cafeCreateRouter = require('./routes/cafe_create');
 const authRouter = require('./routes/auth');
 
+const db_config = require(path.join(__dirname, 'config/database.js'));
+const connection = db_config.init();
+db_config.connect(connection);
+
+
 sequelize.sync({force: false})
   .then(() => {
     console.log('데이터베이스 연결 성공');
@@ -64,6 +69,15 @@ app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
 app.use('/cafe/list/scrap', cafeScrapRouter);
 app.use('/cafe', cafeCreateRouter)
+
+app.post('/cafe/convertAddress',function(req,res,next) {
+  console.log(req.body);
+  connection.query(
+    `UPDATE cafe SET latitude = ${req.body.lat}, longitude = ${req.body.lng} WHERE id=${req.body.id}`,
+  (err, rows, field) => {
+    console.log(req.body.id, "는 됐음");
+  })
+})
 
 app.use((req, res, next) => {
     const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
