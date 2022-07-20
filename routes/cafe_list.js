@@ -10,8 +10,7 @@ db_config.connect(connection);
 router.get('/', (req, res) => {
   connection.query(
     `select id, name, address
-    from cafe
-    where latitude is NULL`,
+    from cafe`,
   (err, rows, field) => {
     return res.send(rows);
   })
