@@ -8,13 +8,41 @@ const connection = db_config.init();
 db_config.connect(connection);
 
 router.get('/', (req, res) => {
+  let cafeDataSet = []
+
   connection.query(
     `select id, name, address, latitude, longitude
     from cafe`,
   (err, rows, field) => {
-    return res.send(rows);
-  })
+    if(err){
+      console.log(err);} 
+    else {
+      for(var i = 0; i < rows.length; i++){
+        cafeDataSet[rows[i].id] = rows[i]
+        cafeDataSet[rows[i].id].filter = []
+      }
+    }
+  }
+)
+
+  connection.query(
+    `select cafe_id, filter_id
+    from cafe_filter`,
+    (err, rows, field) => {
+      if(err){
+        console.log(err);
+      } else {
+        for(var i = 0; i < rows.length; i++){
+          cafeDataSet[rows[i].cafe_id].filter.push(rows[i].filter_id)
+        }
+      }
+      console.log(cafeDataSet);
+      cafeDataSet = cafeDataSet.filter(
+        (element, i) => element!=null
+      )
+      res.send(cafeDataSet)
+    }   
+  )
 })
-// cafe filter group by 개수 전달
 
 module.exports = router;
