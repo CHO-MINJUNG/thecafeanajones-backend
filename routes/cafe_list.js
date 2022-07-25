@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
   let cafeDataSet = []
 
   connection.query(
-    `select id, name, address, latitude, longitude
+    `select id, name, address, latitude, longitude, thumbnail
     from cafe`,
   (err, rows, field) => {
     if(err){
