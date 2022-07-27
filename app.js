@@ -21,6 +21,7 @@ const cafeDetailRouter = require('./routes/cafe_detail');
 const cafeListFilterRouter= require('./routes/cafe_filter');
 const cafeScrapRouter = require('./routes/cafe_scrap');
 const cafeCreateRouter = require('./routes/cafe_create');
+const cafeCommentRouter = require('./routes/comment');
 const authRouter = require('./routes/auth');
 
 const db_config = require(path.join(__dirname, 'config/database.js'));
@@ -68,7 +69,8 @@ app.use('/cafe/detail', cafeDetailRouter);
 app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
 app.use('/cafe/list/scrap', cafeScrapRouter);
-app.use('/cafe', cafeCreateRouter)
+app.use('/cafe/comment', cafeCommentRouter);
+app.use('/cafe', cafeCreateRouter);
 
 app.post('/cafe/convertAddress',function(req,res,next) {
   console.log(req.body);

@@ -11,6 +11,6 @@ exports.isNotLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     next();
   } else {
-    res.send({"message":"로그인한 상태입니다"})
+    res.send({"message":"로그인한 상태입니다", "isDenied": true})
   }
 };
