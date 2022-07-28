@@ -3,6 +3,8 @@ const path = require('path');
 
 const router = express.Router();
 
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares/auth_middleware');
+
 const db_config = require(path.join(__dirname, '../config/database.js'));
 const connection = db_config.init();
 db_config.connect(connection);
@@ -36,13 +38,32 @@ router.get('/', (req, res) => {
           cafeDataSet[rows[i].cafe_id].filter.push(rows[i].filter_id)
         }
       }
-      console.log(cafeDataSet);
-      cafeDataSet = cafeDataSet.filter(
-        (element, i) => element!=null
-      )
-      res.send(cafeDataSet)
     }   
   )
+
+  const user_scrap = (isLoggedIn, () => {
+    connection.query(
+      `select cafe_id
+      from user_scrap
+      where user_id = ${req.user.id}`,
+      (err, rows, field) => {
+        if(err){
+          console.log(err);
+        } else {
+          for(var i = 0; i < rows.length; i++){
+            cafeDataSet[rows[i].cafe_id].filter.unshift(0);
+          }
+        }
+        cafeDataSet = cafeDataSet.filter(
+          (element, i) => element!=null
+        )
+        console.log(cafeDataSet);
+        res.send(cafeDataSet)
+      }   
+    )
+  })
+  user_scrap()
+
 })
 
 module.exports = router;

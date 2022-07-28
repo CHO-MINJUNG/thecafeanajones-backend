@@ -20,7 +20,7 @@ module.exports = () => {
       
       const isPasswordCorrect = await bcrypt.compare(userPassword, isUser.password);
       if (isPasswordCorrect) {
-        return done(null, isUser);
+        return done(null, isUser, phone);
       } else {
         return done(null, false, { message: '비밀번호가 일치하지 않습니다.' });
       }

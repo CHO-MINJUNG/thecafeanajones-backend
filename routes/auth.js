@@ -53,7 +53,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
 // authenticate(전략, 콜백함수(앞의 전략(local)에서 done함수 결과값들을 차례대로 받아오게 하는 것))
 router.post('/login',isNotLoggedIn, (req, res, next) => {
-  passport.authenticate('local', (authError, isUser, info) => {
+  passport.authenticate('local', (authError, isUser, phone, info) => {
     if (authError) {
       console.error(authError);
       return next(authError);
@@ -66,8 +66,8 @@ router.post('/login',isNotLoggedIn, (req, res, next) => {
       if (loginError) {
         return next(loginError);
       } 
-
-      return res.send({isLoggedIn:true});
+      console.log(phone);
+      return res.send({isLoggedIn:true, userId:phone});
     });
   })(req, res, next) ; // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
 });
