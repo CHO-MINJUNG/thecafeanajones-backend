@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
     if (err) {
       return res.send({success: false, message:"요청이 실패하였습니다"})
     }
-    return res.send({success: true, data: rows});
+    return res.send({success: true, comments: rows});
   })
 })
 
