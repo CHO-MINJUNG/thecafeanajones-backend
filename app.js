@@ -22,6 +22,7 @@ const cafeListFilterRouter= require('./routes/cafe_filter');
 const cafeScrapRouter = require('./routes/cafe_scrap');
 const cafeCreateRouter = require('./routes/cafe_create');
 const cafeCommentRouter = require('./routes/comment');
+const cafeVoteRouter = require('./routes/vote');
 const authRouter = require('./routes/auth');
 
 const db_config = require(path.join(__dirname, 'config/database.js'));
@@ -70,16 +71,18 @@ app.use('/cafe/list', cafeListRouter);
 app.use('/cafe/list/filter', cafeListFilterRouter);
 app.use('/cafe/list/scrap', cafeScrapRouter);
 app.use('/cafe/comment', cafeCommentRouter);
+app.use('/cafe/vote', cafeVoteRouter);
 app.use('/cafe', cafeCreateRouter);
 
-app.post('/cafe/convertAddress',function(req,res,next) {
-  console.log(req.body);
-  connection.query(
-    `UPDATE cafe SET latitude = ${req.body.lat}, longitude = ${req.body.lng} WHERE id=${req.body.id}`,
-  (err, rows, field) => {
-    console.log(req.body.id, "는 됐음");
-  })
-})
+// 도로명 주소를 좌표 주소로 바꿔서 저장한 API
+// app.post('/cafe/convertAddress',function(req,res,next) {
+//   console.log(req.body);
+//   connection.query(
+//     `UPDATE cafe SET latitude = ${req.body.lat}, longitude = ${req.body.lng} WHERE id=${req.body.id}`,
+//   (err, rows, field) => {
+//     console.log(req.body.id, "는 됐음");
+//   })
+// })
 
 app.use((req, res, next) => {
     const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

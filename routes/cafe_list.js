@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
           cafeDataSet[rows[i].cafe_id].filter.push(rows[i].filter_id)
         }
       }
-      if (isNotLoggedIn){
+      if (!req.isAuthenticated()){
         cafeDataSet = cafeDataSet.filter(
           (element, i) => element!=null
         )
