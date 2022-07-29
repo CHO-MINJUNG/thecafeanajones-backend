@@ -18,13 +18,19 @@ router.post('/', isLoggedIn, (req, res) => {
       cafe_id:req.body.cafe_id
     },
   (err, rows, field) => {
+    let message, success;
     if(err) {
       if (err.code == "ER_DUP_ENTRY"){
-        return res.send({message: "이미 저장된 카페입니다"})
+        success = false;
+        message = "이미 저장된 카페입니다.";
       }
-      return res.send({message:"요청이 실패하였습니다."})
-    } 
-    return res.send({message:"저장 완료"})
+      success = false;
+      message = "요청이 실패하였습니다.";
+    } else {
+      success = true;
+      message = "저장 되었습니다.";
+    }
+    return res.send({message:message, success:success});
   })
 })
 
