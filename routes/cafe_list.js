@@ -38,9 +38,17 @@ router.get('/', (req, res) => {
           cafeDataSet[rows[i].cafe_id].filter.push(rows[i].filter_id)
         }
       }
+      if (isNotLoggedIn){
+        cafeDataSet = cafeDataSet.filter(
+          (element, i) => element!=null
+        )
+        res.send(cafeDataSet) 
+      } else{
+        user_scrap()
+      }
     }   
   )
-
+  
   const user_scrap = (isLoggedIn, () => {
     connection.query(
       `select cafe_id
@@ -57,13 +65,14 @@ router.get('/', (req, res) => {
         cafeDataSet = cafeDataSet.filter(
           (element, i) => element!=null
         )
-        console.log(cafeDataSet);
         res.send(cafeDataSet)
       }   
     )
   })
-  user_scrap()
+
 
 })
+
+
 
 module.exports = router;
