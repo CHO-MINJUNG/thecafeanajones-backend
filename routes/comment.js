@@ -18,9 +18,9 @@ router.get('/', (req, res) => {
     order by create_time desc`,
   (err, rows, field) => {
     if (err) {
-      return res.send({message:"요청이 실패하였습니다"})
+      return res.send({success: false, message:"요청이 실패하였습니다"})
     }
-    return res.send(rows)
+    return res.send({success: true, data: rows});
   })
 })
 
@@ -35,9 +35,9 @@ router.post('/create', isLoggedIn, (req, res) => {
     },
   (err, rows, field) => {
     if(err) {
-      return res.send({message:"요청이 실패하였습니다."})
+      return res.send({success: false, message:"요청이 실패하였습니다."})
     } 
-    return res.send({message:"저장 완료"})
+    return res.send({success: true, message:"저장 완료"})
     // 전체 comment list를 다시 받을 건지 확인 부탁
     })
   })
