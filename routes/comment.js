@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   connection.query(
     `select id, user_id, comment, create_time
     from comment
-    where cafe_id = ${req.query}
+    where cafe_id = ${req.query.id}
     order by create_time desc`,
   (err, rows, field) => {
     if (err) {
