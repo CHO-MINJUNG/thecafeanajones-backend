@@ -26,6 +26,9 @@ router.get('/', (req, res) => {
 
 router.post('/create', isLoggedIn, (req, res) => {
   const {cafe_id, comment} = req.body;
+
+  // TODO: Auth 확인도 해주고 실패시 success: false, message: "로그인이 필요합니다"
+  // 해주세용~~
   connection.query(
     `insert into comment
     set ?`,{
@@ -39,6 +42,7 @@ router.post('/create', isLoggedIn, (req, res) => {
     } 
     return res.send({success: true, message:"저장 완료"})
     // 전체 comment list를 다시 받을 건지 확인 부탁
+    // 넹 다시주세요~~
     })
   })
 
