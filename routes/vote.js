@@ -12,7 +12,8 @@ db_config.connect(connection);
 // 해당 user가 투표를 하지 않았다면 배열 값이 모두 0
 // 해당 카페의 투표 수 votes, 사용자의 투표 수 user_vote
 router.get('/', (req, res) => {
-  const {cafe_id} = req.body
+  const cafe_id = req.query.id;
+
   let user_vote = [0, 0, 0, 0, 0]
   let votes = [0, 0, 0, 0, 0]
   // 로그인이 되어 있는 경우, 해당 user가 해당 cafe에 투표한 경우 배열 값이 바뀜
@@ -24,13 +25,13 @@ router.get('/', (req, res) => {
   (err, rows, field) => {
     if (err) {
       console.log(err);
-      return res.send({message:"요청이 실패하였습니다"})
+      return res.send({success: false, message:"요청이 실패하였습니다"})
     }
     for (var filter in rows){
       votes[rows[filter].filter_id-1] = rows[filter].cnt
     }
     if (!req.isAuthenticated()) {
-      return res.send({votes: votes, user_vote: user_vote})
+      return res.send({success: true, votes: votes, user_vote: user_vote})
     } else  {
       userCafeVote()
     }
@@ -44,13 +45,13 @@ router.get('/', (req, res) => {
       where cafe_id = ${cafe_id} and user_id = ${req.user.id}`,
     (err, rows, field) => {
       if (err) {
-        return res.send({message:"요청이 실패하였습니다"})
+        return res.send({success: false, message:"요청이 실패하였습니다"})
       }
       for (var filter in rows){
         console.log(filter);
         user_vote[rows[filter].filter_id-1] = 1
       }
-      return res.send({votes: votes, user_vote: user_vote})
+      return res.send({success: true, votes: votes, user_vote: user_vote})
     })
   })
 })

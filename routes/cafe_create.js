@@ -21,9 +21,11 @@ router.post('/create', isLoggedIn, s3.upload.single('image'), (req,res) => {
   const {name, address, filter, featureSet} = req.body;  
   const user_id = req.user.id;
 
+  console.log(req.body);
+
   const create_cafe = {
     name: name,
-    thumbnail: req.file.location, 
+    thumbnail: req.body.file, 
     address: address,
     user_id: user_id,
   }
