@@ -20,7 +20,20 @@ router.get('/', (req, res) => {
     if (err) {
       return res.send({success: false, message:"요청이 실패하였습니다"})
     }
+    
+    if (!req.isAuthenticated()){
+      rows.map(arr => {arr.isMine = false})
+    } else {
+      rows.map(arr => {
+        if (arr.user_id == req.user.id){
+          arr.isMine = true
+        } else {
+          arr.isMine = false
+        }
+      })
+    }
     return res.send({success: true, comments: rows});
+
   })
 })
 
