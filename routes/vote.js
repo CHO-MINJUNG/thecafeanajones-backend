@@ -87,23 +87,25 @@ router.post('/save', isLoggedIn, (req, res) => {
     }
   })
   
+  let insertList = []
   for (var idx in vote){
     if (vote[idx] == 1){
-      connection.query(
-        `insert into vote
-        set ?`,{
-          cafe_id: cafe_id,
-          user_id: req.user.id,
-          filter_id: idx+1
-        },
-      (err, rows, field) => {
-        if(err) {
-          return res.send({message:"투표 데이터 저장에 실패하였습니다."})
-        } 
-      })
+      insertList.push(`(${cafe_id}, ${req.user.id}, ${parseInt(idx)+1})`)
     }
   }
+
+  if (insertList.length!=0){
+    connection.query(
+      `insert into vote (cafe_id, user_id, filter_id)
+      values ${insertList.join(',')}`,
+    (err, rows, field) => {
+      if(err) {
+        return res.send({message:"투표 데이터 저장에 실패하였습니다."})
+      } 
+    })
+  }
   
-  })
+
+})
 
 module.exports = router;

@@ -33,9 +33,23 @@ router.get('/', (req, res) => {
       })
     }
     return res.send({success: true, comments: rows});
-
   })
 })
+
+
+// 보내는 코드
+// export const addComment = async (cafeId, comment) => {
+//   let response = await axios({
+//     method: "POST",
+//     url: `${API_BASE_URL}/cafe/comment/create/${cafeId}`,
+//     data: {cafe_id: cafeId, comment: comment,},
+//   });
+//   if (response.data.success) {
+//     return response.data.message;
+//   } else {
+//     return response.data.message;
+//   }
+// }
 
 router.post('/create', isLoggedIn, (req, res) => {
   const {cafe_id, comment} = req.body;
@@ -58,7 +72,6 @@ router.post('/create', isLoggedIn, (req, res) => {
     // 넹 다시주세요~~
     })
   })
-
 
 router.post('/delete', isLoggedIn, (req, res) => {
   connection.query(
