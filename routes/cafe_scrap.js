@@ -12,37 +12,49 @@ db_config.connect(connection);
 // 스크랩 요청
 router.post('/', isLoggedIn, (req, res) => {
   connection.query(
-    `insert into user_scrap
-    set ?`,{
-      user_id:req.user.id,
-      cafe_id:req.body.cafe_id
-    },
-  (err, rows, field) => {
-    let message, success;
-    if(err) {
-      if (err.code == "ER_DUP_ENTRY"){
-        success = false;
-        message = "이미 저장된 카페입니다.";
-      }
-      success = false;
-      message = "요청이 실패하였습니다.";
-    } else {
-      success = true;
-      message = "저장 되었습니다.";
+    `select *
+    from user_scrap
+    where user_id = ${req.user.id} and cafe_id = ${req.body.cafe_id}`
+  , (err, rows, field) => {
+    if (rows.length == 0) {
+      connection.query(
+        `insert into user_scrap
+        set ?`,{
+          user_id:req.user.id,
+          cafe_id:req.body.cafe_id
+        },
+      (err, rows, field) => {
+        let message, success;
+        if(err) {
+          if (err.code == "ER_DUP_ENTRY"){
+            success = false;
+            message = "이미 저장된 카페입니다.";
+          }
+          success = false;
+          message = "요청이 실패하였습니다.";
+        } else {
+          success = true;
+          message = "저장 되었습니다.";
+        }
+        return res.send({message:message, success:success});
+      })
+    } 
+    else {
+      connection.query(
+        `delete from user_scrap where user_id=${req.user.id} and cafe_id=${req.body.cafe_id}`,
+      (err, rows, field) => {
+        if(err) {
+          return res.send({message:"요청이 실패하였습니다."})
+        } 
+        return res.send({message:"삭제 완료"})
+      })
     }
-    return res.send({message:message, success:success});
   })
+  
 })
 
 router.post('/delete', isLoggedIn, (req, res) => {
-  connection.query(
-    `delete from user_scrap where user_id=${req.user.id} and cafe_id=${req.body.cafe_id}`,
-  (err, rows, field) => {
-    if(err) {
-      return res.send({message:"요청이 실패하였습니다."})
-    } 
-    return res.send({message:"삭제 완료"})
-  })
+  
 })
 
 router.get('/filter', isLoggedIn, (req, res) => {
