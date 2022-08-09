@@ -68,7 +68,7 @@ router.post('/save', isLoggedIn, (req, res) => {
     where cafe_id = ${cafe_id} and user_id = ${req.user.id}`,
   (err, rows, field) => {
     if (err) {
-      return res.send({message:"요청이 실패하였습니다"})
+      return res.send({message:"기존 투표 데이터를 불러오는 데에 실패하였습니다"})
     }
     for (var filter in rows){
       user_vote[rows[filter].filter_id-1] = 1
@@ -80,7 +80,7 @@ router.post('/save', isLoggedIn, (req, res) => {
           where cafe_id=${cafe_id} and user_id=${req.user.id} and filter_id=${idx+1}`,
         (err, rows, field) => {
           if(err) {
-            return res.send({message:"요청이 실패하였습니다."})
+            return res.send({message:"기존 투표 데이터 삭제를 실패하였습니다."})
           } 
         })
       }
@@ -98,7 +98,7 @@ router.post('/save', isLoggedIn, (req, res) => {
         },
       (err, rows, field) => {
         if(err) {
-          return res.send({message:"요청이 실패하였습니다."})
+          return res.send({message:"투표 데이터 저장에 실패하였습니다."})
         } 
       })
     }

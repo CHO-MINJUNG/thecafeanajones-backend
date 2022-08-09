@@ -37,21 +37,6 @@ router.get('/', (req, res) => {
   })
 })
 
-
-// 보내는 코드
-// export const addComment = async (cafeId, comment) => {
-//   let response = await axios({
-//     method: "POST",
-//     url: `${API_BASE_URL}/cafe/comment/create/${cafeId}`,
-//     data: {cafe_id: cafeId, comment: comment,},
-//   });
-//   if (response.data.success) {
-//     return response.data.message;
-//   } else {
-//     return response.data.message;
-//   }
-// }
-
 router.post('/create', isLoggedIn, (req, res) => {
   const {cafe_id, comment} = req.body;
 
