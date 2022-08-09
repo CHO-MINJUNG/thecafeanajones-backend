@@ -11,6 +11,8 @@ db_config.connect(connection);
 
 // 스크랩 요청
 router.post('/', isLoggedIn, (req, res) => {
+  let isAddOrDelete = undefined;
+
   connection.query(
     `select *
     from user_scrap
@@ -34,19 +36,23 @@ router.post('/', isLoggedIn, (req, res) => {
           message = "요청이 실패하였습니다.";
         } else {
           success = true;
+          isAddOrDelete = true;
           message = "저장 되었습니다.";
         }
-        return res.send({message:message, success:success});
+        return res.send({message:message, success:success, isAddOrDelete: true});
       })
     } 
     else {
       connection.query(
         `delete from user_scrap where user_id=${req.user.id} and cafe_id=${req.body.cafe_id}`,
       (err, rows, field) => {
+        let success;
         if(err) {
-          return res.send({message:"요청이 실패하였습니다."})
+          success = false;
+          return res.send({message:"요청이 실패하였습니다.", success:success})
         } 
-        return res.send({message:"삭제 완료"})
+        success = true;
+        return res.send({message:"삭제 완료", success:success, isAddOrDelete: false})
       })
     }
   })
