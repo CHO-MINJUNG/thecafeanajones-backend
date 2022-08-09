@@ -53,9 +53,6 @@ router.post('/', isLoggedIn, (req, res) => {
   
 })
 
-router.post('/delete', isLoggedIn, (req, res) => {
-  
-})
 
 router.get('/filter', isLoggedIn, (req, res) => {
   connection.query(
