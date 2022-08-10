@@ -56,7 +56,6 @@ router.get('/', (req, res) => {
   })
 })
 
-// test 아직 
 // 프론트로부터 cafe_id와 사용자가 새롭게 투표한 vote를 받음(새로 시작, 수정 모두 동일한 api 사용)
 router.post('/save', isLoggedIn, (req, res) => {
   const {cafe_id, vote} = req.body;
@@ -68,7 +67,7 @@ router.post('/save', isLoggedIn, (req, res) => {
     where cafe_id = ${cafe_id} and user_id = ${req.user.id}`,
   (err, rows, field) => {
     if (err) {
-      return res.send({message:"기존 투표 데이터를 불러오는 데에 실패하였습니다"})
+      return res.send({success: false, message:"기존 투표 데이터를 불러오는 데에 실패하였습니다"})
     }
     for (var filter in rows){
       user_vote[rows[filter].filter_id-1] = 1
@@ -80,7 +79,7 @@ router.post('/save', isLoggedIn, (req, res) => {
           where cafe_id=${cafe_id} and user_id=${req.user.id} and filter_id=${idx+1}`,
         (err, rows, field) => {
           if(err) {
-            return res.send({message:"기존 투표 데이터 삭제를 실패하였습니다."})
+            return res.send({success: false, message:"기존 투표 데이터 삭제를 실패하였습니다."})
           } 
         })
       }
@@ -100,12 +99,12 @@ router.post('/save', isLoggedIn, (req, res) => {
       values ${insertList.join(',')}`,
     (err, rows, field) => {
       if(err) {
-        return res.send({message:"투표 데이터 저장에 실패하였습니다."})
+        return res.send({success: false, message:"투표 데이터 저장에 실패하였습니다."})
       } 
+      return res.send({success:true, message: "저장되었습니다"})
     })
   }
   
-
 })
 
 module.exports = router;
