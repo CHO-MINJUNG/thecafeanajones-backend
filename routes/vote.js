@@ -48,7 +48,6 @@ router.get('/', (req, res) => {
         return res.send({success: false, message:"요청이 실패하였습니다"})
       }
       for (var filter in rows){
-        console.log(filter);
         user_vote[rows[filter].filter_id-1] = 1
       }
       return res.send({success: true, votes: votes, user_vote: user_vote})
@@ -85,7 +84,22 @@ router.post('/save', isLoggedIn, (req, res) => {
   //     }
   //   }
   // })
-  
+
+  // 모든 투표를 취소한 경우
+  if (!vote.includes(1)){
+    connection.query(
+      `delete from vote
+      where  cafe_id=${cafe_id} and user_id=${req.user.id}`,
+    (err, rows, field) => {
+      if(err) {
+        console.log(err);
+        return res.send({success: false, message:"투표 데이터 저장에 실패하였습니다."})
+      } 
+      return res.send({success:true, message: "저장되었습니다"})
+    })
+  }
+
+  // 하나라도 투표한 경우
   let insertList = []
   for (var idx in vote){
     if (vote[idx] == 1){
@@ -93,7 +107,6 @@ router.post('/save', isLoggedIn, (req, res) => {
     }
   }
 
-  console.log(insertList);
   if (insertList.length!=0){
     connection.query(
       `delete from vote
@@ -108,20 +121,6 @@ router.post('/save', isLoggedIn, (req, res) => {
       return res.send({success:true, message: "저장되었습니다"})
     })
   }
-  
-  
-  connection.query(
-    `
-    delete from cafe_filter
-      where  cafe_id=${cafe_id};
-    `,
-  (err, rows, field) => {
-    if(err) {
-      console.log(err);
-      return res.send({success: false, message:"투표 데이터 저장에 실패하였습니다."})
-    } 
-    return res.send({success:true, message: "저장되었습니다"})
-  })
 })
 
 module.exports = router;

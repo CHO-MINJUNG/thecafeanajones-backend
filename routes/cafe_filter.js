@@ -10,6 +10,7 @@ db_config.connect(connection);
 
 router.get('/', (req, res) => {
   reqQuery = req.query
+  console.log(reqQuery);
   const returnData = []
   for (var key in req.query){
     if(reqQuery[key] == "true"){

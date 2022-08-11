@@ -29,7 +29,8 @@ router.get('/', (req, res) => {
 
   connection.query(
     `select cafe_id, filter_id
-    from cafe_filter`,
+    from vote
+    group by cafe_id, filter_id`,
     (err, rows, field) => {
       if(err){
         console.log(err);

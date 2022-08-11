@@ -75,13 +75,42 @@ app.use('/cafe/vote', cafeVoteRouter);
 app.use('/cafe', cafeCreateRouter);
 
 // 도로명 주소를 좌표 주소로 바꿔서 저장한 API
-// app.post('/cafe/convertAddress',function(req,res,next) {
-//   console.log(req.body);
+// cafe_filter -> vote로 추가 user_id = 9
+// app.get('/cafe/filterToVote',function(req,res,next) {
+//   let insertList = []
+
 //   connection.query(
-//     `UPDATE cafe SET latitude = ${req.body.lat}, longitude = ${req.body.lng} WHERE id=${req.body.id}`,
+//     `select cafe_id, filter_id
+//     from cafe_filter`,
 //   (err, rows, field) => {
-//     console.log(req.body.id, "는 됐음");
+//     if(err) {
+//       console.log(err);
+//     } 
+//     console.log(rows);
+//     rows.map( arr => {
+//       insertList.push(`(${arr.cafe_id}, 9, ${arr.filter_id})`)
+//     })
+
+//     if (insertList.length!=0){
+//       connection.query(
+//         `
+//         insert into vote (cafe_id, user_id, filter_id)
+//         values ${insertList.join(',')};`,
+//       (err, rows, field) => {
+//         if(err) {
+//           console.log(err);
+//         } 
+//         console.log("됐당");
+//       })
+//     }
 //   })
+
+  // console.log(req.body);
+  // connection.query(
+  //   `UPDATE cafe SET latitude = ${req.body.lat}, longitude = ${req.body.lng} WHERE id=${req.body.id}`,
+  // (err, rows, field) => {
+  //   console.log(req.body.id, "는 됐음");
+  // })
 // })
 
 app.use((req, res, next) => {
