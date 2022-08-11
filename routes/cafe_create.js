@@ -41,7 +41,9 @@ router.post('/create', isLoggedIn, (req,res) => {
 
 // 사진 있는 경우
 router.post('/createPhoto', isLoggedIn, s3.upload.single('image'), (req,res) => {
-  const {name, address, latitude, longitude} = req.body;  
+  console.log("저장은 되니");
+  console.log();
+  const {name, address, latitude, longitude} = req.body;
   const user_id = req.user.id;
 
   const create_cafe = {
@@ -49,7 +51,7 @@ router.post('/createPhoto', isLoggedIn, s3.upload.single('image'), (req,res) => 
     address: address,
     latitude: latitude,
     longitude: longitude,
-    thumbnail: req.body.file, 
+    thumbnail: req.files[0].location, 
     user_id: user_id
   }
 
