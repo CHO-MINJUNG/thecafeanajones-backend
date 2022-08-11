@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/session', (req, res) => {
   const isLoggedIn = req.isAuthenticated();
-  console.log(req.isAuthenticated());
+  req.isAuthenticated();
   return res.send({"isLoggedIn": isLoggedIn});
 });
 
@@ -55,7 +55,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 router.post('/login',isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (authError, isUser, phone, info) => {
     if (authError) {
-      console.error(authError);
+      // console.error(authError);
       return next(authError);
     }
     if (!isUser) {
