@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const multer = require('multer');
 
 // const db_config = require(path.join(__dirname, '../config/database.js'));
 // const connection = db_config.pool();
@@ -16,10 +17,9 @@ let s3 = require("./middlewares/img_s3")
 
 
 // 사진 없는 경우
-router.get('/create', isLoggedIn, (req,res) => {
+router.post('/create', isLoggedIn, (req,res) => {
   const {name, address, latitude, longitude} = req.body;  
   const user_id = req.user.id;
-
   const create_cafe = {
     name: name,
     address: address,
@@ -27,9 +27,8 @@ router.get('/create', isLoggedIn, (req,res) => {
     longitude: longitude,
     user_id: user_id
   }
-
   connection.query(
-    `INSERT INTO cafe SET ${create_cafe}`,
+    `INSERT INTO cafe SET ?`,create_cafe,
     (err, rows, field) => {
       if(err){
         console.log(err);
