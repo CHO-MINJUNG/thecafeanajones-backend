@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const multer = require('multer');
-
 // const db_config = require(path.join(__dirname, '../config/database.js'));
 // const connection = db_config.pool();
 
@@ -13,7 +11,7 @@ db_config.connect(connection);
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares/auth_middleware');
 
 
-let s3 = require("./middlewares/img_s3")
+let upload = require("./middlewares/img_s3")
 
 
 // 사진 없는 경우
@@ -39,10 +37,8 @@ router.post('/create', isLoggedIn, (req,res) => {
   )
 })
 
-// 사진 있는 경우
-router.post('/createPhoto', isLoggedIn, s3.upload.single('image'), (req,res) => {
-  console.log("저장은 되니");
-  console.log();
+// 사진 있는 경우 s3.upload.single('image'), 
+router.post('/createPhoto', isLoggedIn, upload.single('image'), (req,res) => {
   const {name, address, latitude, longitude} = req.body;
   const user_id = req.user.id;
 
@@ -51,12 +47,12 @@ router.post('/createPhoto', isLoggedIn, s3.upload.single('image'), (req,res) => 
     address: address,
     latitude: latitude,
     longitude: longitude,
-    thumbnail: req.files[0].location, 
+    thumbnail: req.file.location, 
     user_id: user_id
   }
 
   connection.query(
-    `INSERT INTO cafe SET ${create_cafe}`,
+    `INSERT INTO cafe SET ?` ,create_cafe,
     (err, rows, field) => {
       if(err){
         console.log(err);

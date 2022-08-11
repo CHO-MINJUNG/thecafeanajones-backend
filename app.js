@@ -6,8 +6,8 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const dotenv = require('dotenv')
-const multer = require('multer');
-const form_data = multer();
+// const multer = require('multer');
+// const form_data = multer();
 
 dotenv.config();
 
@@ -56,7 +56,7 @@ sequelize.sync({force: false})
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json());
-app.use(form_data.array());
+// app.use(form_data.array());
 
 app.use(passport.initialize());
 app.use(passport.session());
