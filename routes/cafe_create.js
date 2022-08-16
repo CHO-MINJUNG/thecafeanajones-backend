@@ -40,6 +40,7 @@ router.post('/create', isLoggedIn, (req,res) => {
 // 사진 있는 경우 s3.upload.single('image'), 
 router.post('/createPhoto', isLoggedIn, upload.single('image'), (req,res) => {
   const {name, address, latitude, longitude} = req.body;
+  console.log(req.file);
   const user_id = req.user.id;
 
   const create_cafe = {

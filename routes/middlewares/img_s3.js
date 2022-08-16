@@ -13,11 +13,13 @@ const upload = multer({
     s3: s3,
     bucket: "cafeanajonesbucket",
     acl: 'public-read-write',
-    contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
+      console.log(file, "파일");
       let extension = path.extname(file.originalname);
       cb(null, `uploads/${v4()}-${Date.now()}${extension}`);
     },
+    contentDisposition: 'attachment',
+    serverSideEncryption: 'AES256'
   }),
 });
 module.exports = upload;
