@@ -65,9 +65,11 @@ router.post('/createPhoto', isLoggedIn, upload.single('image'), (req,res) => {
 })
 
 router.post('/update', isLoggedIn, upload.single('image'), (req, res) => {
+  console.log(req.body);
+  console.log("파일 위치",req.file.location);
   connection.query(
-    `UPDATE cafe SET thumbnail = ${req.file.location} 
-    WHERE id = ${req.body.id}`,
+    `UPDATE cafe SET thumbnail = ? 
+    WHERE id = ${req.body.id};`,req.file.location,
   (err, rows, field) => {
     if(err) {
       return res.send({success: false, message:"요청이 실패하였습니다."})

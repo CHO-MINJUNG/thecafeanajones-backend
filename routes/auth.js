@@ -11,8 +11,7 @@ const router = express.Router();
 
 router.get('/session', (req, res) => {
   const isLoggedIn = req.isAuthenticated();
-  req.isAuthenticated();
-  return res.send({"isLoggedIn": isLoggedIn, userId:phone});
+  return res.send({"isLoggedIn": isLoggedIn});
 });
 
 router.post('/isUser', async (req, res) => {
