@@ -80,17 +80,49 @@ router.post('/update', isLoggedIn, upload.single('image'), (req, res) => {
 // 진행중
 router.post('/delete', isLoggedIn, (req, res) => {
   connection.query(
-    `select report from report where id=${req.body.cafe_id};`,
+    `select report from report where cafe_id=${req.body.cafe_id} and user_id=${req.user.id};`,
   (err, rows, field) => {
     if(err) {
       return res.send({success: false, message:"요청이 실패하였습니다."})
     } 
-    if (4 <= parseInt(rows[0])) {
-
+    if (rows.length > 0) {
+      return res.send({success: false, message:"이미 신고가 완료된 카페입니다"})
     }
-    return res.send({success: true, message:"삭제 완료"})
+    connection.query(
+      `select count(user_id) as cnt from report where cafe_id = ${req.body.cafe_id} group by cafe_id`,
+    (err, rows, field) => {
+      if(err) {
+        return res.send({success: false, message:"요청이 실패하였습니다."})
+      } 
+      if (parseInt(rows[0].cnt)>=4){
+        // 찐 삭제 query 넣을 부분
+        connection.query(
+          `delete from cafe where id=${req.body.cafe_id};
+          delete from vote where cafe_id=${req.body.cafe_id};
+          delete from comment where cafe_id=${req.body.cafe_id};`,
+        (err, rows, field) => {
+          if(err) {
+            return res.send({success: false, message:"요청이 실패하였습니다."})
+          } 
+          return res.send({success: true, message:"삭제 완료"})
+        })
+      }
+      // 신고 접수 부분
+      connection.query(
+        `insert into report
+        set ?`,{
+          user_id:req.user.id,
+          cafe_id:req.body.cafe_id
+        },
+      (err, rows, field) => {
+        if(err) {
+          return res.send({success: false, message:"요청이 실패하였습니다."})
+        } 
+        return res.send({success: true, message:"신고가 접수되었습니다"})
+      })
+    })
+    
   })
 })
-
 
 module.exports = router;
