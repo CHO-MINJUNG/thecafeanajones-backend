@@ -40,7 +40,7 @@ router.post('/create', isLoggedIn, (req,res) => {
 // 사진 있는 경우 s3.upload.single('image'), 
 router.post('/createPhoto', isLoggedIn, upload.single('image'), (req,res) => {
   const {name, address, latitude, longitude} = req.body;
-  console.log(req.file);
+  // console.log(req.file);
   const user_id = req.user.id;
 
   const create_cafe = {
@@ -64,20 +64,31 @@ router.post('/createPhoto', isLoggedIn, upload.single('image'), (req,res) => {
   )
 })
 
-// cafe 정보 삭제 route 
-//-> 관리자 승인 후 삭제 뭐 이런거 해야 하려나..? 위험해 보이는...
-// 작성자만 삭제 가능하게 할련지?
-
-router.post('/delete', isLoggedIn, (req, res) => {
+router.post('/update', isLoggedIn, upload.single('image'), (req, res) => {
   connection.query(
-    `delete from cafe where id=${req.body.id};
-    delete from vote where cafe_id=${req.body.id};
-    delete from comment where cafe_id=${req.body.id};`,
+    `UPDATE cafe SET thumbnail = ${req.file.location} 
+    WHERE id = ${req.body.id}`,
   (err, rows, field) => {
     if(err) {
-      return res.send({message:"요청이 실패하였습니다."})
+      return res.send({success: false, message:"요청이 실패하였습니다."})
     } 
-    return res.send({message:"삭제 완료"})
+    return res.send({success: true, message:"수정 완료"})
+  })
+})
+
+
+// 진행중
+router.post('/delete', isLoggedIn, (req, res) => {
+  connection.query(
+    `select report from report where id=${req.body.cafe_id};`,
+  (err, rows, field) => {
+    if(err) {
+      return res.send({success: false, message:"요청이 실패하였습니다."})
+    } 
+    if (4 <= parseInt(rows[0])) {
+
+    }
+    return res.send({success: true, message:"삭제 완료"})
   })
 })
 
