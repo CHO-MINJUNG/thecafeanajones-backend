@@ -14,7 +14,6 @@ const upload = multer({
     bucket: "cafeanajonesbucket",
     acl: 'public-read-write',
     key: function (req, file, cb) {
-      console.log(file, "파일");
       let extension = path.extname(file.originalname);
       cb(null, `uploads/${v4()}-${Date.now()}${extension}`);
     },
