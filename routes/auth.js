@@ -9,6 +9,10 @@ const  User  = require('../models/User');
 
 const router = express.Router();
 
+const db_config = require(path.join(__dirname, '../config/database.js'));
+const connection = db_config.init();
+db_config.connect(connection);
+
 router.get('/session', (req, res) => {
   const isLoggedIn = req.isAuthenticated();
   if (isLoggedIn) {
@@ -20,11 +24,12 @@ router.get('/session', (req, res) => {
       if(err){
         console.log(err);
       } 
-      return res.send({"isLoggedIn": isLoggedIn, "phone": rows[0].phone});
+      return res.send({"isLoggedIn": isLoggedIn, "userId": rows[0].phone});
     }
    )
+  } else{
+    return res.send({"isLoggedIn": isLoggedIn, "userId":null });
   }
-  return res.send({"isLoggedIn": isLoggedIn, "phone":null });
 });
 
 router.post('/isUser', async (req, res) => {
