@@ -23,6 +23,7 @@ const cafeDetailRouter = require('./routes/cafe_detail');
 const cafeListFilterRouter= require('./routes/cafe_filter');
 const cafeScrapRouter = require('./routes/cafe_scrap');
 const cafeCreateRouter = require('./routes/cafe_create');
+const cafeDeleteRouter = require('./routes/cafe_delete');
 const cafeCommentRouter = require('./routes/comment');
 const cafeVoteRouter = require('./routes/vote');
 const authRouter = require('./routes/auth');
@@ -76,6 +77,7 @@ app.use('/cafe/list/scrap', cafeScrapRouter);
 app.use('/cafe/comment', cafeCommentRouter);
 app.use('/cafe/vote', cafeVoteRouter);
 app.use('/cafe', cafeCreateRouter);
+app.use('/cafe', cafeDeleteRouter)
 
 // 도로명 주소를 좌표 주소로 바꿔서 저장한 API
 // cafe_filter -> vote로 추가 user_id = 9
